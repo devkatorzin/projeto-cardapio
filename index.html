@@ -32,11 +32,6 @@
         .text-laranja { color: var(--laranja); }
         .border-laranja { border-color: var(--laranja); }
 
-        /* Estilo do header */
-        .bg-header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        }
-
         /* Botão adicionar ao carrinho */
         .add-to-cart-btn {
             background-color: var(--laranja);
@@ -94,13 +89,13 @@
 <body class="pb-16">
 
     <!-- HEADER -->
-    <header class="w-full h-[420px] bg-header bg-cover bg-center">
+    <header class="w-full h-[420px] bg-cover bg-center" style="background-image: url('./assets/img/banner.png');">
         <div class="w-full h-full flex flex-col justify-center items-center">
 
             <!-- LOGO: substitua o src pela imagem real quando tiver -->
             <div class="w-32 h-32 rounded-full shadow-lg bg-white flex items-center justify-center hover:scale-110 duration-200">
                 <img
-                    src="./assets/img/logo_kelve.png"
+                    src="./assets/img/logo.png"
                     alt="Logo Loja Kelve"
                     class="w-28 h-28 rounded-full object-cover"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
