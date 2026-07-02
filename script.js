@@ -279,20 +279,22 @@ checkoutBtn.addEventListener("click", function () {
 
     // Monta a mensagem para o WhatsApp
     const cartItems = cart.map(item =>
-        `▪ ${item.name} | Qtd: ${item.quantity} | R$ ${(item.price * item.quantity).toFixed(2).replace(".", ",")}`
+        `- ${item.name}\n  Qtd: ${item.quantity} | R$ ${(item.price * item.quantity).toFixed(2).replace(".", ",")}`
     ).join("\n")
 
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
     const totalFormatado = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
 
     const modoEntrega = tipoEntrega === "entrega"
-        ? `🚚 Entrega\n📍 Endereço: ${addressInput.value.trim()}`
-        : `🏪 Retirada na loja`
+        ? `*Entrega*\nEndereco: ${addressInput.value.trim()}`
+        : `*Retirada na loja*`
 
     const message =
-        `🛒 *Pedido - Loja Kelve*\n\n` +
-        `${cartItems}\n\n` +
-        `💰 *Total: ${totalFormatado}*\n\n` +
+        `*Pedido - Loja Kelve*\n` +
+        `--------------------------------\n` +
+        `${cartItems}\n` +
+        `--------------------------------\n` +
+        `*Total: ${totalFormatado}*\n` +
         `${modoEntrega}`
 
     const phone = "91991396925"
@@ -314,8 +316,8 @@ checkoutBtn.addEventListener("click", function () {
 function checkStoreOpen() {
     const agora = new Date()
     const hora = agora.getHours()
-    return hora >= 7 && hora < 21
-    // true = loja aberta (07h às 21h)
+    return hora >= 8 && hora < 20
+    // true = loja aberta (08h às 20h)
 }
 
 const spanItem = document.getElementById("date-span")
