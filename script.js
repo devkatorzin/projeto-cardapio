@@ -338,8 +338,8 @@ if (isOpen) {
 let produtoAtual = null
 let fotosAtual = []
 
-function abrirProduto(nome, desc, preco, foto1, foto2) {
-    produtoAtual = { nome, desc, preco: parseFloat(preco) }
+function abrirProduto(nome, desc, preco, foto1, foto2, categoria) {
+    produtoAtual = { nome, desc, preco: parseFloat(preco), categoria }
     fotosAtual = [foto1, foto2]
 
     // Imagem principal (começa na foto 1)
@@ -368,7 +368,8 @@ function abrirProduto(nome, desc, preco, foto1, foto2) {
 
     // Botão WhatsApp - pedir mais informações
     document.getElementById("modal-whats-btn").onclick = function () {
-        const msg = encodeURIComponent(`Quero saber mais sobre: ${nome}`)
+        const precoFormatado = parseFloat(preco).toFixed(2).replace(".", ",")
+        const msg = encodeURIComponent(`Quero saber mais sobre: ${nome} - R$ ${precoFormatado} (${categoria})`)
         window.open(`https://wa.me/91991396925?text=${msg}`, "_blank")
     }
 
