@@ -286,11 +286,11 @@ checkoutBtn.addEventListener("click", function () {
     const totalFormatado = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
 
     const modoEntrega = tipoEntrega === "entrega"
-        ? `*Entrega*\nEndereco: ${addressInput.value.trim()}`
+        ? `*Entrega:*\nEndereço: ${addressInput.value.trim()}`
         : `*Retirada na loja*`
 
     const message =
-        `*Pedido - Loja Kelve*\n` +
+        `*Pedido - Kelve Store*\n` +
         `--------------------------------\n` +
         `${cartItems}\n` +
         `--------------------------------\n` +
@@ -316,8 +316,8 @@ checkoutBtn.addEventListener("click", function () {
 function checkStoreOpen() {
     const agora = new Date()
     const hora = agora.getHours()
-    return hora >= 8 && hora < 20
-    // true = loja aberta (08h às 20h)
+    return hora >= 7 && hora < 20
+    // true = loja aberta (07h às 20h)
 }
 
 const spanItem = document.getElementById("date-span")
