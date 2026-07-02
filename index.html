@@ -15,7 +15,7 @@
     <!-- META TAG OG -->
     <meta property="og:type" content="website"/>
     <meta property="og:title" content="Kelve Store - Eletrônicos e muito mais!"/>
-    <meta property="og:image" content="./assets/img/logo.png"/>
+    <meta property="og:image" content="./assets/img/logo_kelve.png"/>
     <meta property="og:description" content="Eletrônicos, acessórios, casa e variedades com os melhores preços!"/>
     <meta property="og:site_name" content="Kelve Store"/>
 
@@ -62,6 +62,21 @@
             padding-top: 10px;
         }
 
+        /* Imagem e nome clicáveis */
+        .product-clickable {
+            cursor: pointer;
+        }
+        .product-clickable:hover {
+            opacity: 0.85;
+        }
+        .product-name-clickable {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .product-name-clickable:hover {
+            color: var(--laranja);
+        }
+
         /* Separador de categoria */
         .category-title {
             border-left: 4px solid var(--laranja);
@@ -101,6 +116,128 @@
         #cart-footer {
             background-color: var(--laranja);
         }
+
+        /* ===== MODAL DE PRODUTO ===== */
+        #product-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        #product-modal.open {
+            display: flex;
+        }
+        .product-modal-box {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            position: relative;
+        }
+        .product-modal-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 16px;
+            padding: 0;
+        }
+        .product-modal-back:hover {
+            color: var(--laranja);
+        }
+        .product-modal-gallery {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .product-modal-gallery img {
+            width: 50%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #f0f0f0;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .product-modal-gallery img.active,
+        .product-modal-gallery img:hover {
+            border-color: var(--laranja);
+        }
+        .product-modal-main-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 14px;
+        }
+        .product-modal-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .product-modal-desc {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+        .product-modal-price {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--laranja);
+            margin-bottom: 16px;
+        }
+        .product-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-add-modal {
+            flex: 1;
+            background-color: var(--laranja);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+        .btn-add-modal:hover {
+            background-color: var(--laranja-escuro);
+        }
+        .btn-info-whats {
+            flex: 1;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+        .btn-info-whats:hover {
+            background-color: #1ebe5d;
+        }
     </style>
 </head>
 
@@ -110,17 +247,15 @@
     <header class="w-full h-[420px] bg-cover bg-center" style="background-image: url('./assets/img/banner.png');">
         <div class="w-full h-full flex flex-col justify-center items-center">
 
-            <!-- LOGO: substitua o src pela imagem real quando tiver -->
             <div class="w-32 h-32 rounded-full shadow-lg bg-white flex items-center justify-center hover:scale-110 duration-200">
                 <img
                     src="./assets/img/logo_kelve.png"
-                    alt="Logo Loja Kelve"
+                    alt="Logo Kelve Store"
                     class="w-28 h-28 rounded-full object-cover"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
                 />
-                <!-- Fallback se não tiver logo -->
                 <div style="display:none" class="w-full h-full rounded-full flex items-center justify-center">
-                    <i class="fa fa-bolt text-5xl text-laranja" style="color: var(--laranja);"></i>
+                    <i class="fa fa-bolt text-5xl" style="color: var(--laranja);"></i>
                 </div>
             </div>
 
@@ -129,7 +264,6 @@
             </h1>
 
             <span class="text-white font-medium">
-                <!-- Substitua pelo endereço real -->
                 Seu endereço aqui - Cidade, UF
             </span>
 
@@ -160,99 +294,85 @@
 
         <main class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-4 mb-12">
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/eletronico-1.png"
-                    alt="Caixinha de Som Bluetooth"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/eletronico-1.png" alt="Caixinha de Som Bluetooth"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Caixinha de Som Bluetooth','Portátil, resistente à água, Bluetooth 5.0, bateria 8h','79.90','./assets/img/eletronico-1.png','./assets/img/eletronico-1b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Caixinha de Som Bluetooth','Portátil, resistente à água, Bluetooth 5.0, bateria 8h','79.90','./assets/img/eletronico-1.png','./assets/img/eletronico-1b.png')">
                         Caixinha de Som Bluetooth
                         <span class="badge-oferta">Oferta</span>
                     </p>
                     <p class="text-sm text-gray-600">Portátil, resistente à água, Bluetooth 5.0, bateria 8h</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 79,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Caixinha de Som Bluetooth"
-                            data-price="79.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Caixinha de Som Bluetooth" data-price="79.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/eletronico-2.png"
-                    alt="Mouse Sem Fio"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/eletronico-2.png" alt="Mouse Sem Fio"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Mouse Sem Fio','2.4GHz, pilha inclusa, silencioso, receptor nano USB','29.90','./assets/img/eletronico-2.png','./assets/img/eletronico-2b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Mouse Sem Fio</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Mouse Sem Fio','2.4GHz, pilha inclusa, silencioso, receptor nano USB','29.90','./assets/img/eletronico-2.png','./assets/img/eletronico-2b.png')">
+                        Mouse Sem Fio
+                    </p>
                     <p class="text-sm text-gray-600">2.4GHz, pilha inclusa, silencioso, receptor nano USB</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 29,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Mouse Sem Fio"
-                            data-price="29.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Mouse Sem Fio" data-price="29.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/eletronico-3.png"
-                    alt="Teclado USB"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/eletronico-3.png" alt="Teclado USB"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Teclado USB','Full size, ABNT2, teclas silenciosas, plug and play','44.90','./assets/img/eletronico-3.png','./assets/img/eletronico-3b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Teclado USB</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Teclado USB','Full size, ABNT2, teclas silenciosas, plug and play','44.90','./assets/img/eletronico-3.png','./assets/img/eletronico-3b.png')">
+                        Teclado USB
+                    </p>
                     <p class="text-sm text-gray-600">Full size, ABNT2, teclas silenciosas, plug and play</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 44,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Teclado USB"
-                            data-price="44.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Teclado USB" data-price="44.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/eletronico-4.png"
-                    alt="Pen Drive 32GB"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/eletronico-4.png" alt="Pen Drive 32GB"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Pen Drive 32GB','USB 3.0, leitura até 120MB/s, design compacto','27.90','./assets/img/eletronico-4.png','./assets/img/eletronico-4b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Pen Drive 32GB</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Pen Drive 32GB','USB 3.0, leitura até 120MB/s, design compacto','27.90','./assets/img/eletronico-4.png','./assets/img/eletronico-4b.png')">
+                        Pen Drive 32GB
+                    </p>
                     <p class="text-sm text-gray-600">USB 3.0, leitura até 120MB/s, design compacto</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 27,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Pen Drive 32GB"
-                            data-price="27.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Pen Drive 32GB" data-price="27.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
@@ -271,99 +391,85 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-4 mb-12">
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/acessorio-1.png"
-                    alt="Fone Bluetooth"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/acessorio-1.png" alt="Fone Bluetooth"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Fone Bluetooth','Som estéreo, bateria 20h, dobrável, com microfone','49.90','./assets/img/acessorio-1.png','./assets/img/acessorio-1b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Fone Bluetooth','Som estéreo, bateria 20h, dobrável, com microfone','49.90','./assets/img/acessorio-1.png','./assets/img/acessorio-1b.png')">
                         Fone Bluetooth
                         <span class="badge-oferta">Oferta</span>
                     </p>
                     <p class="text-sm text-gray-600">Som estéreo, bateria 20h, dobrável, com microfone</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 49,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Fone Bluetooth"
-                            data-price="49.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Fone Bluetooth" data-price="49.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/acessorio-2.png"
-                    alt="Cabo USB-C 2m"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/acessorio-2.png" alt="Cabo USB-C 2m"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Cabo USB-C 2m','Carregamento rápido, nylon reforçado, 2 metros','12.90','./assets/img/acessorio-2.png','./assets/img/acessorio-2b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Cabo USB-C 2m</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Cabo USB-C 2m','Carregamento rápido, nylon reforçado, 2 metros','12.90','./assets/img/acessorio-2.png','./assets/img/acessorio-2b.png')">
+                        Cabo USB-C 2m
+                    </p>
                     <p class="text-sm text-gray-600">Carregamento rápido, nylon reforçado, 2 metros</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 12,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Cabo USB-C 2m"
-                            data-price="12.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Cabo USB-C 2m" data-price="12.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/acessorio-3.png"
-                    alt="Carregador Turbo 65W"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/acessorio-3.png" alt="Carregador Turbo 65W"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Carregador Turbo 65W','Universal, entrada USB-C e USB-A, bivolt','34.90','./assets/img/acessorio-3.png','./assets/img/acessorio-3b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Carregador Turbo 65W</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Carregador Turbo 65W','Universal, entrada USB-C e USB-A, bivolt','34.90','./assets/img/acessorio-3.png','./assets/img/acessorio-3b.png')">
+                        Carregador Turbo 65W
+                    </p>
                     <p class="text-sm text-gray-600">Universal, entrada USB-C e USB-A, bivolt</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 34,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Carregador Turbo 65W"
-                            data-price="34.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Carregador Turbo 65W" data-price="34.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/acessorio-4.png"
-                    alt="Película 3D"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/acessorio-4.png" alt="Película 3D"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Película 3D','Cobertura total, anti-impacto, kit com álcool e pano','9.90','./assets/img/acessorio-4.png','./assets/img/acessorio-4b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Película 3D</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Película 3D','Cobertura total, anti-impacto, kit com álcool e pano','9.90','./assets/img/acessorio-4.png','./assets/img/acessorio-4b.png')">
+                        Película 3D
+                    </p>
                     <p class="text-sm text-gray-600">Cobertura total, anti-impacto, kit com álcool e pano</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 9,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Película 3D"
-                            data-price="9.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Película 3D" data-price="9.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
@@ -382,99 +488,85 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-4 mb-12">
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/casa-1.png"
-                    alt="Fritadeira Elétrica 2L"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/casa-1.png" alt="Fritadeira Elétrica 2L"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Fritadeira Elétrica 2L','Sem óleo, timer digital, desligamento automático, 1200W','149.90','./assets/img/casa-1.png','./assets/img/casa-1b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Fritadeira Elétrica 2L','Sem óleo, timer digital, desligamento automático, 1200W','149.90','./assets/img/casa-1.png','./assets/img/casa-1b.png')">
                         Fritadeira Elétrica 2L
                         <span class="badge-oferta">Oferta</span>
                     </p>
                     <p class="text-sm text-gray-600">Sem óleo, timer digital, desligamento automático, 1200W</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 149,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Fritadeira Elétrica 2L"
-                            data-price="149.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Fritadeira Elétrica 2L" data-price="149.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/casa-2.png"
-                    alt="Luminária LED Touch"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/casa-2.png" alt="Luminária LED Touch"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Luminária LED Touch','3 tons de luz, recarregável USB, dimmer por toque','39.90','./assets/img/casa-2.png','./assets/img/casa-2b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Luminária LED Touch</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Luminária LED Touch','3 tons de luz, recarregável USB, dimmer por toque','39.90','./assets/img/casa-2.png','./assets/img/casa-2b.png')">
+                        Luminária LED Touch
+                    </p>
                     <p class="text-sm text-gray-600">3 tons de luz, recarregável USB, dimmer por toque</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 39,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Luminária LED Touch"
-                            data-price="39.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Luminária LED Touch" data-price="39.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/casa-3.png"
-                    alt="Bule Elétrico 1.5L"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/casa-3.png" alt="Bule Elétrico 1.5L"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Bule Elétrico 1.5L','Inox, desligamento automático, base 360°, bivolt','69.90','./assets/img/casa-3.png','./assets/img/casa-3b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Bule Elétrico 1.5L</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Bule Elétrico 1.5L','Inox, desligamento automático, base 360°, bivolt','69.90','./assets/img/casa-3.png','./assets/img/casa-3b.png')">
+                        Bule Elétrico 1.5L
+                    </p>
                     <p class="text-sm text-gray-600">Inox, desligamento automático, base 360°, bivolt</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 69,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Bule Elétrico 1.5L"
-                            data-price="69.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Bule Elétrico 1.5L" data-price="69.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/casa-4.png"
-                    alt="Suporte Organizador Inox"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/casa-4.png" alt="Suporte Organizador Inox"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Suporte Organizador Inox','Para panelas e tampas, resistente, fácil limpeza','18.90','./assets/img/casa-4.png','./assets/img/casa-4b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Suporte Organizador Inox</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Suporte Organizador Inox','Para panelas e tampas, resistente, fácil limpeza','18.90','./assets/img/casa-4.png','./assets/img/casa-4b.png')">
+                        Suporte Organizador Inox
+                    </p>
                     <p class="text-sm text-gray-600">Para panelas e tampas, resistente, fácil limpeza</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 18,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Suporte Organizador Inox"
-                            data-price="18.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Suporte Organizador Inox" data-price="18.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
@@ -493,99 +585,85 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-4 mb-16">
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/var-1.png"
-                    alt="Relógio Digital LED"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/var-1.png" alt="Relógio Digital LED"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Relógio Digital LED','Alarme, resistente à água, pulseira ajustável','32.90','./assets/img/var-1.png','./assets/img/var-1b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Relógio Digital LED','Alarme, resistente à água, pulseira ajustável','32.90','./assets/img/var-1.png','./assets/img/var-1b.png')">
                         Relógio Digital LED
                         <span class="badge-oferta">Oferta</span>
                     </p>
                     <p class="text-sm text-gray-600">Alarme, resistente à água, pulseira ajustável</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 32,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Relógio Digital LED"
-                            data-price="32.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Relógio Digital LED" data-price="32.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/var-2.png"
-                    alt="Squeeze Inox 750ml"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/var-2.png" alt="Squeeze Inox 750ml"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Squeeze Inox 750ml','Mantém temperatura por 12h, tampa com alça, livre de BPA','22.90','./assets/img/var-2.png','./assets/img/var-2b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Squeeze Inox 750ml</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Squeeze Inox 750ml','Mantém temperatura por 12h, tampa com alça, livre de BPA','22.90','./assets/img/var-2.png','./assets/img/var-2b.png')">
+                        Squeeze Inox 750ml
+                    </p>
                     <p class="text-sm text-gray-600">Mantém temperatura por 12h, tampa com alça, livre de BPA</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 22,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Squeeze Inox 750ml"
-                            data-price="22.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Squeeze Inox 750ml" data-price="22.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/var-3.png"
-                    alt="Calculadora Científica"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/var-3.png" alt="Calculadora Científica"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Calculadora Científica','240 funções, display grande, ideal para escola e faculdade','25.90','./assets/img/var-3.png','./assets/img/var-3b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Calculadora Científica</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Calculadora Científica','240 funções, display grande, ideal para escola e faculdade','25.90','./assets/img/var-3.png','./assets/img/var-3b.png')">
+                        Calculadora Científica
+                    </p>
                     <p class="text-sm text-gray-600">240 funções, display grande, ideal para escola e faculdade</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 25,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Calculadora Científica"
-                            data-price="25.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Calculadora Científica" data-price="25.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUTO -->
             <div class="flex gap-6">
-                <img
-                    src="./assets/img/var-4.png"
-                    alt="Pilhas AA (4 unidades)"
-                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200"
+                <img src="./assets/img/var-4.png" alt="Pilhas AA (4 unidades)"
+                    class="w-28 h-28 rounded-md object-cover hover:scale-110 hover:rotate-2 duration-200 product-clickable"
                     onerror="this.src='https://placehold.co/112x112/FF6B00/white?text=📦'"
+                    onclick="abrirProduto('Pilhas AA (4 unidades)','Alcalina, longa duração, baixa autodescarga','8.90','./assets/img/var-4.png','./assets/img/var-4b.png')"
                 />
                 <div class="product-info">
-                    <p class="font-bold">Pilhas AA (4 unidades)</p>
+                    <p class="font-bold product-name-clickable"
+                        onclick="abrirProduto('Pilhas AA (4 unidades)','Alcalina, longa duração, baixa autodescarga','8.90','./assets/img/var-4.png','./assets/img/var-4b.png')">
+                        Pilhas AA (4 unidades)
+                    </p>
                     <p class="text-sm text-gray-600">Alcalina, longa duração, baixa autodescarga</p>
                     <div class="product-footer">
                         <p class="font-bold text-lg text-laranja">R$ 8,90</p>
-                        <button
-                            class="add-to-cart-btn"
-                            data-name="Pilhas AA (4 unidades)"
-                            data-price="8.90"
-                        >
+                        <button class="add-to-cart-btn" data-name="Pilhas AA (4 unidades)" data-price="8.90">
                             <i class="fa fa-cart-plus text-lg"></i>
                         </button>
                     </div>
@@ -596,6 +674,48 @@
 
     </div>
     <!-- FIM DO MENU -->
+
+
+    <!-- ===== MODAL DE PRODUTO ===== -->
+    <div id="product-modal" onclick="fecharModalProdutoSeOverlay(event)">
+        <div class="product-modal-box">
+
+            <button class="product-modal-back" onclick="fecharModalProduto()">
+                <i class="fa fa-arrow-left"></i> Voltar
+            </button>
+
+            <img id="modal-main-img" src="" alt="" class="product-modal-main-img"
+                onerror="this.src='https://placehold.co/480x480/FF6B00/white?text=📦'"
+            />
+
+            <div class="product-modal-gallery">
+                <img id="modal-thumb-1" src="" alt="Foto 1"
+                    class="active"
+                    onclick="trocarFoto(0)"
+                    onerror="this.src='https://placehold.co/200x200/FF6B00/white?text=📦'"
+                />
+                <img id="modal-thumb-2" src="" alt="Foto 2"
+                    onclick="trocarFoto(1)"
+                    onerror="this.src='https://placehold.co/200x200/FF6B00/white?text=📦'"
+                />
+            </div>
+
+            <p class="product-modal-name" id="modal-name"></p>
+            <p class="product-modal-desc" id="modal-desc"></p>
+            <p class="product-modal-price" id="modal-price"></p>
+
+            <div class="product-modal-actions">
+                <button class="btn-add-modal" id="modal-add-btn">
+                    <i class="fa fa-cart-plus"></i> Adicionar
+                </button>
+                <button class="btn-info-whats" id="modal-whats-btn">
+                    <i class="fab fa-whatsapp"></i> Mais info
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <!-- FIM MODAL DE PRODUTO -->
 
 
     <!-- MODAL CART -->
@@ -612,7 +732,6 @@
                 Total: <span id="cart-total" style="color: var(--laranja);">R$ 0,00</span>
             </p>
 
-            <!-- OPÇÕES DE ENTREGA / RETIRADA -->
             <p class="font-bold mt-4 mb-2">Como quer receber?</p>
             <div class="flex gap-3 mb-3">
                 <div class="delivery-option selected" id="opt-entrega" onclick="selecionarEntrega('entrega')">
@@ -625,7 +744,6 @@
                 </div>
             </div>
 
-            <!-- CAMPO ENDEREÇO (só aparece na entrega) -->
             <div id="address-section">
                 <p class="font-bold mt-2">Endereço de entrega:</p>
                 <input
@@ -639,11 +757,7 @@
 
             <div class="flex items-center justify-between mt-5 w-full">
                 <button id="close-modal-btn" class="text-gray-500 hover:text-gray-700">Fechar</button>
-                <button
-                    id="checkout-btn"
-                    class="text-white px-4 py-2 rounded font-bold"
-                    style="background-color: var(--laranja);"
-                >
+                <button id="checkout-btn" class="text-white px-4 py-2 rounded font-bold" style="background-color: var(--laranja);">
                     Finalizar pedido
                 </button>
             </div>
@@ -655,16 +769,12 @@
 
     <!-- BUTTON CART FOOTER -->
     <footer id="cart-footer" class="w-full py-3 fixed bottom-0 z-40 flex items-center justify-center">
-        <button
-            class="flex items-center gap-2 text-white font-bold"
-            id="cart-btn"
-        >
+        <button class="flex items-center gap-2 text-white font-bold" id="cart-btn">
             (<span id="cart-count">0</span>)
             Ver meu Carrinho
             <i class="fa fa-cart-plus text-lg text-white"></i>
         </button>
     </footer>
-    <!-- FIM BUTTON CART FOOTER -->
 
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>

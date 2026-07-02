@@ -286,7 +286,7 @@ checkoutBtn.addEventListener("click", function () {
     const totalFormatado = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
 
     const modoEntrega = tipoEntrega === "entrega"
-        ? `*Entrega:*\nEndereço: ${addressInput.value.trim()}`
+        ? `*Entrega*\nEndereco: ${addressInput.value.trim()}`
         : `*Retirada na loja*`
 
     const message =
@@ -316,8 +316,8 @@ checkoutBtn.addEventListener("click", function () {
 function checkStoreOpen() {
     const agora = new Date()
     const hora = agora.getHours()
-    return hora >= 7 && hora < 20
-    // true = loja aberta (07h às 20h)
+    return hora >= 8 && hora < 20
+    // true = loja aberta (08h às 20h)
 }
 
 const spanItem = document.getElementById("date-span")
@@ -329,4 +329,65 @@ if (isOpen) {
 } else {
     spanItem.classList.remove("bg-green-600")
     spanItem.classList.add("bg-red-500")
+}
+
+
+// ===========================
+// MODAL DE PRODUTO
+// ===========================
+let produtoAtual = null
+let fotosAtual = []
+
+function abrirProduto(nome, desc, preco, foto1, foto2) {
+    produtoAtual = { nome, desc, preco: parseFloat(preco) }
+    fotosAtual = [foto1, foto2]
+
+    // Imagem principal (começa na foto 1)
+    document.getElementById("modal-main-img").src = foto1
+    document.getElementById("modal-main-img").alt = nome
+
+    // Miniaturas
+    document.getElementById("modal-thumb-1").src = foto1
+    document.getElementById("modal-thumb-2").src = foto2
+
+    // Miniatura ativa
+    document.getElementById("modal-thumb-1").classList.add("active")
+    document.getElementById("modal-thumb-2").classList.remove("active")
+
+    // Textos
+    document.getElementById("modal-name").textContent = nome
+    document.getElementById("modal-desc").textContent = desc
+    document.getElementById("modal-price").textContent =
+        "R$ " + parseFloat(preco).toFixed(2).replace(".", ",")
+
+    // Botão adicionar ao carrinho
+    document.getElementById("modal-add-btn").onclick = function () {
+        addToCart(produtoAtual.nome, produtoAtual.preco)
+        fecharModalProduto()
+    }
+
+    // Botão WhatsApp - pedir mais informações
+    document.getElementById("modal-whats-btn").onclick = function () {
+        const msg = encodeURIComponent(`Quero saber mais sobre: ${nome}`)
+        window.open(`https://wa.me/91991396925?text=${msg}`, "_blank")
+    }
+
+    document.getElementById("product-modal").classList.add("open")
+}
+
+function trocarFoto(index) {
+    document.getElementById("modal-main-img").src = fotosAtual[index]
+
+    document.getElementById("modal-thumb-1").classList.toggle("active", index === 0)
+    document.getElementById("modal-thumb-2").classList.toggle("active", index === 1)
+}
+
+function fecharModalProduto() {
+    document.getElementById("product-modal").classList.remove("open")
+}
+
+function fecharModalProdutoSeOverlay(event) {
+    if (event.target === document.getElementById("product-modal")) {
+        fecharModalProduto()
+    }
 }
