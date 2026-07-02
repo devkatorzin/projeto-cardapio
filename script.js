@@ -286,7 +286,7 @@ checkoutBtn.addEventListener("click", function () {
     const totalFormatado = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
 
     const modoEntrega = tipoEntrega === "entrega"
-        ? `*Entrega*\nEndereço: ${addressInput.value.trim()}`
+        ? `\n*Entrega*\nEndereço: ${addressInput.value.trim()}`
         : `*Retirada na loja*`
 
     const message =
